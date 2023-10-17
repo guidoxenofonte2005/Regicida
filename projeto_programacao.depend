@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1697076294 source:c:\users\guido e ageu\desktop\gido\projetos\projeto_programacao\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<stdbool.h>
+	<locale.h>
+	<windows.h>
+	<mmsystem.h>
+
