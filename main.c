@@ -542,3 +542,5 @@ int exibeTabuleiro(int **tabuleiro, int W, int w, int H, int h)
     }
     return 0;
 }
+
+// testes pra ver se funciona
