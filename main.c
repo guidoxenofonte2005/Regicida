@@ -29,7 +29,13 @@ int main()
     int colorarr[37];
     int **bigarr;
     int x, y, w=6, W=6, h=6, H=6;
-    int smallarr[6][6];
+
+    struct Casa{
+        int cor;
+        int trancada;
+    };
+    struct Casa casas6x6[6][6];
+
     int coordinates;
     int r=0,g=0,ye=0,b=0,p=0,c=0;
     int casasarr[7];
@@ -81,9 +87,9 @@ int main()
             case 4:
                 paint(1);
                 printf("\tDIGITE UMA OPÇÃO VÁLIDA! ");
+            default:
                 reset();
                 continue;
-            default:
                 paint(1);
                 printf("\tDIGITE UMA OPÇÃO VÁLIDA! ");
                 reset();
@@ -290,7 +296,7 @@ int main()
         printf("#\n");
         reset();
 
-/*/
+//*/
         // CODE FOR INPUTS
         for (int n=1;n<36;n++)
         {
@@ -306,8 +312,9 @@ int main()
                 y = (int)strtol(posicao1, NULL, 16);
                 x = (int)strtol(posicao2, NULL, 16);
 
+                //importante
                 invalid = (bigarr[y][x]!=0 || (bigarr[y-1][x]==0 && bigarr[y+1][x]==0 && bigarr[y][x-1]==0 && bigarr[y][x+1]==0) || (W-w==5 && (x>W || x<w)) || (H-h==5 && (y>H || y<h)))? true : false;
-
+                //fim do importante
                 if ((y>11||y<1)||(x<1||x>11)) {
                     paint(1);
                     printf("\tERRO! DIGITE UMA COORDENADA VÁLIDA!\n\n");
@@ -343,6 +350,7 @@ int main()
                 }
             }
             // END OF THAT SHIT
+            printf(" W: %d\n w: %d\n H: %d\n h: %d\n",W,w,H,h);
 
             bigarr[y][x]=colorarr[n];
 
@@ -384,6 +392,8 @@ int main()
             reset();
         }
 //*/
+        // END OF INPUT
+
         printf("\n\t\t ");
         for (int i=0; i<7; i++)
         {
@@ -402,7 +412,49 @@ int main()
                 printf("%d ", k);
             }
         }
+        printf("\n");
 
+        // FASE DE INTRIGA
+
+        int origemI = -1; // Para rastrear a linha da primeira ocorrência de cor
+        int origemJ = -1; // Para rastrear a coluna da primeira ocorrência de cor
+
+        // Encontre a primeira ocorrência de cor na matriz original
+        for (int i = 1; i < 12; i++) {
+            for (int j = 1; j < 12; j++) {
+                if (bigarr[i][j] != 0) {
+                    origemI = i;
+                    origemJ = j;
+                    break;
+                }
+            }
+            if (origemI != -1) {
+                break; // Se a primeira ocorrência de cor foi encontrada, saia dos loops
+            }
+        }
+
+        if (origemI != -1) {
+            // Inicialize a matriz com cores e estado de trancamento, começando da primeira ocorrência de cor
+            for (int i = origemI; i < 12 && i - origemI < 6; i++) {
+                for (int j = origemJ; j < 12 && j - origemJ < 6; j++) {
+                    int corOriginal = bigarr[i][j];
+                    if (corOriginal != 0) {
+                        casas6x6[i - origemI][j - origemJ].cor = corOriginal;
+                        casas6x6[i - origemI][j - origemJ].trancada = 0; // Inicialmente, nenhuma célula está trancada
+                    }
+                }
+            }
+        }
+
+
+        for (int i=0; i<6; i++) {
+            for (int j=0; j<6; j++) {
+                paint(casas6x6[i][j].cor);
+                printf(" # ");
+                reset();
+            }
+            printf("\n");
+        }
     }
     // END OF THIRD MODE AREA
 }
@@ -411,38 +463,45 @@ int main()
 // COLOR FUNCTIONS AREA:
 
 void red() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, 12);
+    //HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    //SetConsoleTextAttribute(hConsole, 12);
+    printf("\033[31m");
 }
 
 void green() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, 10);
+    //HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    //SetConsoleTextAttribute(hConsole, 10);
+    printf("\033[32m");
 }
 
 void yellow() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, 14);
+    // HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    // SetConsoleTextAttribute(hConsole, 14);
+    printf("\033[33m");
 }
 
 void blue() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, 9);
+    // HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    // SetConsoleTextAttribute(hConsole, 9);
+    printf("\033[34m");
 }
 
 void purple() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, 13);
+    // HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    // SetConsoleTextAttribute(hConsole, 13);
+    printf("\033[35m");
 }
 
 void cyan() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, 11);
+    // HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    // SetConsoleTextAttribute(hConsole, 11);
+    printf("\033[36m");
 }
 
 void reset() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, 15);
+    // HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    // SetConsoleTextAttribute(hConsole, 15);
+    printf("\033[m");
 }
 
 // END OF COLOR FUNCTIONS
@@ -527,12 +586,12 @@ int exibeTabuleiro(int **tabuleiro, int W, int w, int H, int h)
         {
             if (tabuleiro[i][j]==0)
             {
-                Sleep(5);
+                //Sleep(5);
                 printf("%x%x ", i,j);
             }
             else
             {
-                Sleep(5);
+                //Sleep(5);
                 paint(tabuleiro[i][j]);
                 printf(" # ");
                 reset();
@@ -543,5 +602,10 @@ int exibeTabuleiro(int **tabuleiro, int W, int w, int H, int h)
     return 0;
 }
 
+int validaIntriga(/*?????*/) {
+
+}
+
+int fazIntriga(){}
 
 // gildo mexendo no git

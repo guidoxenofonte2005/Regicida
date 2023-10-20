@@ -8,3 +8,12 @@
 	<windows.h>
 	<mmsystem.h>
 
+1697826100 source:c:\users\guido e ageu\desktop\gido\projetos\regicida\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<stdbool.h>
+	<locale.h>
+	<windows.h>
+	<mmsystem.h>
+
