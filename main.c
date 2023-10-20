@@ -416,10 +416,10 @@ int main()
 
         // FASE DE INTRIGA
 
-        int origemI = -1; // Para rastrear a linha da primeira ocorrência de cor
-        int origemJ = -1; // Para rastrear a coluna da primeira ocorrência de cor
+        // Validação da matriz pequena
+        int origemI = -1;
+        int origemJ = -1;
 
-        // Encontre a primeira ocorrência de cor na matriz original
         for (int i = 1; i < 12; i++) {
             for (int j = 1; j < 12; j++) {
                 if (bigarr[i][j] != 0) {
@@ -429,32 +429,26 @@ int main()
                 }
             }
             if (origemI != -1) {
-                break; // Se a primeira ocorrência de cor foi encontrada, saia dos loops
+                break;
             }
         }
 
         if (origemI != -1) {
-            // Inicialize a matriz com cores e estado de trancamento, começando da primeira ocorrência de cor
             for (int i = origemI; i < 12 && i - origemI < 6; i++) {
                 for (int j = origemJ; j < 12 && j - origemJ < 6; j++) {
                     int corOriginal = bigarr[i][j];
                     if (corOriginal != 0) {
                         casas6x6[i - origemI][j - origemJ].cor = corOriginal;
-                        casas6x6[i - origemI][j - origemJ].trancada = 0; // Inicialmente, nenhuma célula está trancada
+                        casas6x6[i - origemI][j - origemJ].trancada = 0;
                     }
                 }
             }
         }
+        // Fim da validação
 
 
-        for (int i=0; i<6; i++) {
-            for (int j=0; j<6; j++) {
-                paint(casas6x6[i][j].cor);
-                printf(" # ");
-                reset();
-            }
-            printf("\n");
-        }
+
+
     }
     // END OF THIRD MODE AREA
 }
