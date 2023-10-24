@@ -8,6 +8,11 @@
 #include <windows.h>
 #include <mmsystem.h>
 
+struct Casa{
+    int cor;
+    int trancada;
+};
+
 int main()
 {
     setlocale(LC_ALL, "Portuguese");
@@ -30,11 +35,7 @@ int main()
     int **bigarr;
     int x, y, w=6, W=6, h=6, H=6;
 
-    struct Casa{
-        int cor;
-        int trancada;
-    };
-    struct Casa casas6x6[6][6];
+    struct Casa **casas6x6;
 
     int coordinates;
     int r=0,g=0,ye=0,b=0,p=0,c=0;
@@ -48,20 +49,24 @@ int main()
     {
         bigarr[i] = (int *)malloc(sizeof(int)*13);
     }
+    casas6x6 = (struct Casa **) malloc(6*sizeof(struct Casa *));
+    for (int i=0; i<6; i++) {
+        casas6x6[i] = (struct Casa*) malloc(6*sizeof(struct Casa));
+    }
 
     // GAMEMODE SELECTION AREA
 
     Sleep(500);
-    //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\t 1 - Unidos somos Fortes (WIP);\n");
     Sleep(200);
-    //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\t 2 - Dividir para Conquistar (WIP);\n");
     Sleep(200);
-    //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\t 3 - Concentração Central;\n");
     Sleep(200);
-    //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\t 4 - Controle da Fronteira (WIP);\n");
 
 
@@ -113,13 +118,13 @@ int main()
         // THIRD MODE DIFFICULTY SELECTION AREA
 
         Sleep(500);
-        //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+        PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
         printf("\t 1 - Fácil;\n");
         Sleep(200);
-        //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+        PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
         printf("\t 2 - Médio;\n");
         Sleep(200);
-        //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+        PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
         printf("\t 3 - Difícil;\n");
         Sleep(200);
 
@@ -289,7 +294,7 @@ int main()
         Sleep(490);
         // END OF THIS
 
-        exibeTabuleiro(bigarr, H, h, W, w);
+        exibeTabuleiro(bigarr, casas6x6, H, h, W, w, 1);
 
         printf("\n\tPróxima peça: ");
         paint(colorarr[1]);
@@ -350,7 +355,7 @@ int main()
                 }
             }
             // END OF THAT SHIT
-            printf(" W: %d\n w: %d\n H: %d\n h: %d\n",W,w,H,h);
+            //printf(" W: %d\n w: %d\n H: %d\n h: %d\n",W,w,H,h);
 
             bigarr[y][x]=colorarr[n];
 
@@ -384,7 +389,7 @@ int main()
             }
             printf("\n");
 
-            exibeTabuleiro(bigarr, H, h, W, w);
+            exibeTabuleiro(bigarr, casas6x6, H, h, W, w, 1);
 
             printf("\n\tPróxima peça: ");
             paint(colorarr[n+1]);
@@ -394,7 +399,7 @@ int main()
 //*/
         // END OF INPUT
 
-        printf("\n\t\t ");
+        printf("\n\t\t");
         for (int i=0; i<7; i++)
         {
             if (i!=5)
@@ -404,49 +409,43 @@ int main()
                 reset();
             }
         }
-        printf("\n\t\t ");
+        printf("\n\t\t");
         for (int k=0; k<7; k++)
         {
             if (k!=5)
             {
-                printf("%d ", k);
+                printf(" %d ", k);
             }
         }
         printf("\n");
 
         // FASE DE INTRIGA
+        int k=0, l=0;
+        for (int i=H-5; i<h+6; i++){
+            for (int j=W-5; j<w+6; j++){
+                casas[k][l].cor = bigarr[i][j];
+                printf("%d ", casas[k][l].cor);
+                l++
+            }
+            k++;
+            l=0;
+            printf("\n");
+        }
 
+        for (int i=0; i<6; i++){
+            for (int j=0; j<6; j++){
+                int c = casas[i][j].cor;
+                paint(c);
+                printf("%d ", c);
+                reset();
+            }
+            printf("\n");
+        }
         // Validação da matriz pequena
-        int origemI = -1;
-        int origemJ = -1;
 
-        for (int i = 1; i < 12; i++) {
-            for (int j = 1; j < 12; j++) {
-                if (bigarr[i][j] != 0) {
-                    origemI = i;
-                    origemJ = j;
-                    break;
-                }
-            }
-            if (origemI != -1) {
-                break;
-            }
-        }
-
-        if (origemI != -1) {
-            for (int i = origemI; i < 12 && i - origemI < 6; i++) {
-                for (int j = origemJ; j < 12 && j - origemJ < 6; j++) {
-                    int corOriginal = bigarr[i][j];
-                    if (corOriginal != 0) {
-                        casas6x6[i - origemI][j - origemJ].cor = corOriginal;
-                        casas6x6[i - origemI][j - origemJ].trancada = 0;
-                    }
-                }
-            }
-        }
         // Fim da validação
 
-
+        exibeTabuleiro(bigarr, casas6x6, H, h, W, w, 2);
 
 
     }
@@ -457,45 +456,38 @@ int main()
 // COLOR FUNCTIONS AREA:
 
 void red() {
-    //HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    //SetConsoleTextAttribute(hConsole, 12);
-    printf("\033[31m");
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 12);
 }
 
 void green() {
-    //HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    //SetConsoleTextAttribute(hConsole, 10);
-    printf("\033[32m");
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 10);
 }
 
 void yellow() {
-    // HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    // SetConsoleTextAttribute(hConsole, 14);
-    printf("\033[33m");
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_RED);
 }
 
 void blue() {
-    // HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    // SetConsoleTextAttribute(hConsole, 9);
-    printf("\033[34m");
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 9);
 }
 
 void purple() {
-    // HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    // SetConsoleTextAttribute(hConsole, 13);
-    printf("\033[35m");
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 13);
 }
 
 void cyan() {
-    // HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    // SetConsoleTextAttribute(hConsole, 11);
-    printf("\033[36m");
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 11);
 }
 
 void reset() {
-    // HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    // SetConsoleTextAttribute(hConsole, 15);
-    printf("\033[m");
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 15);
 }
 
 // END OF COLOR FUNCTIONS
@@ -571,28 +563,50 @@ void paint(int n)
 
 // FUNÇÕES OBRIGATÓRIAS:
 
-int exibeTabuleiro(int **tabuleiro, int W, int w, int H, int h)
+int exibeTabuleiro(int **tabuleiro, struct Casa **tabuleiroMini, int H, int h, int W, int w, int modo)
 {
-    for (int i=W-5; i<w+6; i++)
-    {
-        printf("\t");
-        for (int j=H-5; j<h+6; j++)
+    switch (modo) {
+    case 1:
+        for (int i=H-5; i<h+6; i++)
         {
-            if (tabuleiro[i][j]==0)
+            printf("\t");
+            for (int j=W-5; j<w+6; j++)
             {
-                //Sleep(5);
-                printf("%x%x ", i,j);
+                if (tabuleiro[i][j]==0)
+                {
+                    //Sleep(5);
+                    printf("%x%x ", i,j);
+                }
+                else
+                {
+                    //Sleep(5);
+                    paint(tabuleiro[i][j]);
+                    printf(" # ");
+                    reset();
+                }
             }
-            else
+            printf("\n");
+        }
+        break;
+    case 2:
+        for (int i=0; i<6; i++)
+        {
+            printf("\t");
+            for (int j=0; j<6; j++)
             {
-                //Sleep(5);
-                paint(tabuleiro[i][j]);
+                Sleep(5);
+                paint(tabuleiroMini[i][j].cor);
                 printf(" # ");
                 reset();
             }
+            printf("\n");
         }
-        printf("\n");
+        break;
+    default:
+        printf("ERRO");
+        break;
     }
+
     return 0;
 }
 

@@ -17,3 +17,12 @@
 	<windows.h>
 	<mmsystem.h>
 
+1698154675 source:c:\users\ufca\desktop\liberada\gido_nao_mexe_plmds_coisa_importante\regicida\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<stdbool.h>
+	<locale.h>
+	<windows.h>
+	<mmsystem.h>
+
