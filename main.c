@@ -28,6 +28,14 @@ int main()
     //PlaySound(" coloca o nome do arquivo aqui ", NULL, SND_FILENAME | SND_ASYNC);
 
     // VARIABLE AREA
+    int array_testes[6][6] = {{1, 2, 3, 4, 5, 6},
+                              {1, 2, 3, 4, 5, 6},
+                              {1, 2, 3, 4, 5, 6},
+                              {1, 2, 3, 4, 5, 6},
+                              {1, 2, 3, 4, 5, 6},
+                              {1, 2, 3, 4, 5, 6}
+    };
+
     char posicao1[2], posicao2[2], posicaostr[3];
     int opcao_modo;
     int dificuldade;
@@ -185,6 +193,9 @@ int main()
         }
 
         bool *casasrev = (bool*)malloc(7*sizeof(bool));
+        for (int i=0; i<7; i++) {
+            casasrev[i] = false;
+        }
 
         for (int i=0;i<=3-dificuldade;i++)
         {
@@ -301,7 +312,7 @@ int main()
         printf("#\n");
         reset();
 
-//*/
+/*/
         // CODE FOR INPUTS
         for (int n=1;n<36;n++)
         {
@@ -414,38 +425,63 @@ int main()
         {
             if (k!=5)
             {
-                printf(" %d ", k);
+                printf("%d ", k);
             }
         }
         printf("\n");
 
         // FASE DE INTRIGA
         int k=0, l=0;
-        for (int i=H-5; i<h+6; i++){
-            for (int j=W-5; j<w+6; j++){
-                casas[k][l].cor = bigarr[i][j];
-                printf("%d ", casas[k][l].cor);
-                l++
+        for (int i=0/*H-5*/; i<6/*h+6*/; i++){
+            for (int j=0/*W-5*/; j<6/*w+6*/; j++){
+                casas6x6[k][l].cor = array_testes[i][j]/*bigarr[i][j]*/;
+                l++;
             }
             k++;
             l=0;
-            printf("\n");
-        }
-
-        for (int i=0; i<6; i++){
-            for (int j=0; j<6; j++){
-                int c = casas[i][j].cor;
-                paint(c);
-                printf("%d ", c);
-                reset();
-            }
-            printf("\n");
         }
         // Validação da matriz pequena
 
         // Fim da validação
 
-        exibeTabuleiro(bigarr, casas6x6, H, h, W, w, 2);
+        for (int i=0; i<6; i++) {
+            paint(1);
+            printf("\t\t   FASE DE INTRIGA\n\t\t%d INTRIGAS RESTANTES\n\n", 6-i);
+            reset();
+
+            exibeTabuleiro(bigarr, casas6x6, H, h, W, w, 2);
+
+            char posicao_pequeno[3];
+            char posicao1_peq[2], posicao2_peq[2];
+            int valido;
+
+            do {
+                printf("\tCasa 1 >- ");
+                fflush(stdin);
+                fgets(posicao_pequeno, 3, stdin);
+
+                posicao1_peq[0] = posicao_pequeno[0];
+                posicao2_peq[0] = posicao_pequeno[1];
+                int x1_peq = (int)strtol(posicao1_peq, NULL, 16);
+                int y1_peq = (int)strtol(posicao2_peq, NULL, 16)-9;
+
+                printf("\tCasa 2 >- ");
+                fflush(stdin);
+                fgets(posicao_pequeno, 3, stdin);
+
+                posicao1_peq[0] = posicao_pequeno[0];
+                posicao2_peq[0] = posicao_pequeno[1];
+                int x2_peq = (int)strtol(posicao1_peq, NULL, 16);
+                int y2_peq = ((int)strtol(posicao2_peq, NULL, 16))-9;
+
+                valido = validaIntriga(x1_peq, x2_peq, y1_peq, y2_peq);
+                if (!valido) {
+                    paint(1);
+                    printf("\tDIGITE CASAS ADJACENTES!\n");
+                    reset();
+                }
+            } while (!valido);
+        }
 
 
     }
@@ -494,7 +530,6 @@ void reset() {
 
 
 // RANDOM COLOR GENERATOR:
-
 
 int randcolornum(int *r, int *g, int *ye, int *b, int *p, int *c, int Max)
 {
@@ -574,12 +609,12 @@ int exibeTabuleiro(int **tabuleiro, struct Casa **tabuleiroMini, int H, int h, i
             {
                 if (tabuleiro[i][j]==0)
                 {
-                    //Sleep(5);
+                    Sleep(5);
                     printf("%x%x ", i,j);
                 }
                 else
                 {
-                    //Sleep(5);
+                    Sleep(5);
                     paint(tabuleiro[i][j]);
                     printf(" # ");
                     reset();
@@ -589,10 +624,13 @@ int exibeTabuleiro(int **tabuleiro, struct Casa **tabuleiroMini, int H, int h, i
         }
         break;
     case 2:
+        printf("\t\t   1  2  3  4  5  6\n");
         for (int i=0; i<6; i++)
         {
-            printf("\t");
-            for (int j=0; j<6; j++)
+            int j = 0;
+            printf("\t\t");
+            printf("%x ", i+10);
+            for (j=0; j<6; j++)
             {
                 Sleep(5);
                 paint(tabuleiroMini[i][j].cor);
@@ -610,10 +648,16 @@ int exibeTabuleiro(int **tabuleiro, struct Casa **tabuleiroMini, int H, int h, i
     return 0;
 }
 
-int validaIntriga(/*?????*/) {
+int validaIntriga(int x1_peq, int x2_peq, int y1_peq, int y2_peq) {
 
+    int valid = (((y2_peq==y1_peq && (x2_peq-x1_peq==1 || x2_peq-x1_peq==-1))||(x2_peq==x1_peq && (y2_peq-y1_peq==1 || y2_peq-y1_peq==-1)))
+                          &&(x1_peq<7&&x1_peq>0)&&(x2_peq<7&&x2_peq>0)&&(y1_peq<7&&y1_peq>0)&&(y2_peq<7&&y2_peq>0)) ? 1 : 0;
+
+    return valid;
 }
 
-int fazIntriga(){}
+int fazIntriga(){
+
+}
 
 // gildo mexendo no git
