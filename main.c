@@ -13,17 +13,36 @@ struct Casa{
     int trancada;
 };
 
+HANDLE wHnd;
+HANDLE rHnd;
+
 int main()
 {
     setlocale(LC_ALL, "Portuguese");
     srand(time(0));
 
+    // WINDOW AREA
+    HWND consoleWindow = GetConsoleWindow();
+
+    SetWindowPos( consoleWindow, 0, 700, 150, 0, 0, SWP_NOSIZE | SWP_NOZORDER );
+
+    wHnd = GetStdHandle(STD_OUTPUT_HANDLE);
+    rHnd = GetStdHandle(STD_INPUT_HANDLE);
+    SetConsoleTitle("REGICIDA");
+    SMALL_RECT windowSize = {0, 0, 49, 30};
+    SetConsoleWindowInfo(wHnd, 1, &windowSize);
+
     Sleep(500);
+    paint(1);
     printf("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
     Sleep(500);
-    printf("\t\t    REGICIDA\n");
+    printf("\t ___ ___ ___ ___ ___ ___ ___   _\n");
+    printf("\t| _ \\ __/ __|_ _/ __|_ _|   \\ /_\\\n");
+    printf("\t|   / _| (_ || | (__ | || |) / _ \\\n");
+    printf("\t|_|_\\___\\___|___\\___|___|___/_/ \\_\\\n\n");
     Sleep(500);
     printf("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n");
+    reset();
 
     //PlaySound(" coloca o nome do arquivo aqui ", NULL, SND_FILENAME | SND_ASYNC);
 
