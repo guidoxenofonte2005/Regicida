@@ -19,6 +19,8 @@ HANDLE rHnd;
 int main()
 {
     config();
+    mciSendString("open Sounds\\OST\\Requiem_for_a_Dream.wav alias REQUIEM", NULL, 0, NULL);
+    mciSendString("play REQUIEM", NULL, 0, NULL);
     start();
 
     // VARIABLE AREA
@@ -44,7 +46,6 @@ int main()
     struct Casa **casas6x6;
 
     int coordinates;
-    int r=0,g=0,ye=0,b=0,p=0,c=0;
     int casasarr[7];
     bool invalid;
     bool valid_gamemode;
@@ -61,16 +62,15 @@ int main()
     }
 
     // INITIAL CHOICE AREA
-
     do{
         Sleep(500);
-        //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+        PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
         printf("\t 1 - Jogar;\n");
         Sleep(200);
-        //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+        PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
         printf("\t 2 - Regras;\n");
         Sleep(200);
-        //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+        PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
         printf("\t 3 - Créditos;\n");
         Sleep(200);
         printf("\t Escolha uma das opções: ");
@@ -88,6 +88,7 @@ int main()
             paint(1);
             printf("\tDigite 0 para sair das regras e voltar para as opções: ");
             reset();
+            fflush(stdin);
             scanf("%d", &voltar);
             }while (voltar != 0);
             printf("\n");
@@ -99,6 +100,7 @@ int main()
             paint(1);
             printf("\tDigite 0 para sair dos créditos e voltar para as opções: ");
             reset();
+            fflush(stdin);
             scanf("%d", &voltar);
             }while (voltar != 0);
             printf("\n");
@@ -115,16 +117,16 @@ int main()
     // GAMEMODE SELECTION AREA
 
     Sleep(500);
-    //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\t 1 - Unidos somos Fortes (WIP);\n");
     Sleep(200);
-    //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\t 2 - Dividir para Conquistar (WIP);\n");
     Sleep(200);
-    //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\t 3 - Concentração Central;\n");
     Sleep(200);
-    //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\t 4 - Controle da Fronteira;\n");
 
     printf("\t Digite o modo de jogo: ");
@@ -170,30 +172,29 @@ int main()
     if (opcao_modo==3)
     {
         paint(1);
-        printf("\tModo Selecionado: Concentração Central\n");
+        printf("\tModo Selecionado: Concentração Central\n\n");
         reset();
     }else if (opcao_modo==4)
     {
         paint(1);
-        printf("\tModo Selecionado: Controle da Fronteira\n");
+        printf("\tModo Selecionado: Controle da Fronteira\n\n");
         reset();
     }
 
     // THIRD MODE DIFFICULTY SELECTION AREA
 
-    //PlaySound(" coloca o nome do arquivo aqui ", NULL, SND_FILENAME | SND_ASYNC);
     Sleep(500);
-    //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\t 1 - Fácil;\n");
     Sleep(200);
-    //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\t 2 - Médio;\n");
     Sleep(200);
-    //PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound("Sounds\\SFX\\blipSelect.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\t 3 - Difícil;\n");
     Sleep(200);
 
-    printf("\tSelecione a dificuldade: ");
+    printf("\t Selecione a dificuldade: ");
     while (true) {
         fflush(stdin);
         scanf("%d", &dificuldade);
@@ -201,7 +202,7 @@ int main()
             break;
         } else {
             paint(1);
-            printf("\tDIGITE UMA OPÇÃO VÁLIDA! ");
+            printf("\t DIGITE UMA OPÇÃO VÁLIDA! ");
             reset();
         }
     }
@@ -220,34 +221,9 @@ int main()
 
     Sleep(340);
 
-    // RANDOM STACKING COLORS GENERATION AREA
-    for (int i=0; i<36; i++)
-    {
-        colorarr[i]=randcolornum(&r,&g,&ye,&b,&p,&c,6);
-        if (i==35)
-        {
-            colorarr[i+1]=0;
-        }
-    }
 
-    for (int i=0;i<13;i++)
-    {
-        for (int j=0;j<13;j++)
-        {
-            bigarr[i][j]=(i!=6||j!=6)? 0:colorarr[0];
-        }
-    }
-    // RANDOM STACKING COLORS GENERATION AREA
+    embaralhar(bigarr, colorarr, casasarr, valor_pulado);
 
-    r=0,g=0,ye=0,b=0,p=0,c=0;
-
-    for (int i=0; i<7; i++)
-    {
-        if (i!=valor_pulado)
-        {
-            casasarr[i]=randcolornum(&r,&g,&ye,&b,&p,&c,1);
-        }
-    }
 
     bool *casasrev = (bool*)malloc(7*sizeof(bool));
     for (int i=0; i<7; i++) {
@@ -270,7 +246,7 @@ int main()
 
             imprime_N_das_cores(casasarr, casasrev, cortranc, valor_pulado);
 
-            printf("\n\tDigite o número correspondente à\n\tcasa a ser revelada: ");
+            printf("\t Digite o número correspondente à\n\tcasa a ser revelada: ");
             scanf("%d", &n);
 
             if (n<0||n>6||n==valor_pulado)
@@ -309,7 +285,7 @@ int main()
 
     Sleep(200);
 
-    printf("\n\n");
+    mciSendString("stop REQUIEM", NULL, 0, NULL);
 
     // LEVEL GENERATION TEXT
     printf("\t\tGerando nível.");
@@ -319,9 +295,18 @@ int main()
     printf(".\n\n");
     Sleep(200);
     // END OF THIS
+    paint(1);
+
+    PlaySound("Sounds\\SFX\\changeRound.wav", NULL, SND_FILENAME | SND_ASYNC);
+    printf("\t\t\t   FASE DE EXPANSÃO\n\n\n");
+    reset();
+    Sleep(1000);
+
+    //mciSendString("open Sounds\\OST\\The_Puppeteers_Tale.wav alias REQUIEM", NULL, 0, NULL);
+    //mciSendString("play REQUIEM", NULL, 0, NULL);
+    PlaySound("Sounds\\OST\\The_Puppeteers_Tale.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
     exibeTabuleiro(bigarr, casas6x6, H, h, W, w, 1);
-
     printf("\n\tPróxima peça: ");
     paint(colorarr[1]);
     printf("#\n");
@@ -349,12 +334,10 @@ int main()
                 paint(1);
                 printf("\tERRO! DIGITE UMA COORDENADA VÁLIDA!\n\n");
                 reset();
-            }
-
-            if (invalid) {
-            paint(1);
-            printf("\tERRO! COORDENADAS INVÁLIDAS!\n\n");
-            reset();
+            } else if (invalid) {
+                paint(1);
+                printf("\tERRO! COORDENADAS INVÁLIDAS!\n\n");
+                reset();
             }
 
         } while ((y>11||y<1)||(x<1||x>11)||invalid);
@@ -379,7 +362,7 @@ int main()
                 w = x;
             }
         }
-        // END OF THAT SHIT
+        // END OF THAT
         //printf(" W: %d\n w: %d\n H: %d\n h: %d\n",W,w,H,h);
         bigarr[y][x]=colorarr[n];
 
@@ -423,15 +406,20 @@ int main()
     // Validação da matriz pequena
 
     // Fim da validação
-
+    PlaySound(NULL, NULL, NULL);
     paint(1);
+    PlaySound("Sounds\\SFX\\changeRound.wav", NULL, SND_FILENAME | SND_ASYNC);
     printf("\n\t\t\t   FASE DE INTRIGA\n");
     reset();
+    Sleep(1000);
+    PlaySound(NULL, NULL, NULL);
+    PlaySound("Sounds\\OST\\The_Puppeteers_Tale.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     for (int i=0; i<6; i++)
     {
         Sleep(500);
         paint(1);
-        printf("\n\t\t\t%d INTRIGAS RESTANTES\n", 6-i);
+        printf("\t\t\t%d INTRIGAS RESTANTES\n", 6-i);
         reset();
 
         if (pontosCorretos(casas6x6, casasarr, modo, valor_pulado))
@@ -457,6 +445,7 @@ int main()
         {
             do
             {
+                printf("\t\t    Digite 00 se quer desistir: \n");
                 printf("\t\t    Casa 1 >- ");
                 fflush(stdin);
                 fgets(posicao_pequeno, 3, stdin);
@@ -466,7 +455,12 @@ int main()
                 x1_peq = (int)strtol(posicao1_peq, NULL, 16)-1;
                 y1_peq = (int)strtol(posicao2_peq, NULL, 16)-1;
 
-                if (x1_peq>5||x1_peq<0||y1_peq>5||y1_peq<0){
+                if (x1_peq==-1 && y1_peq==-1)
+                {
+                    defeat();
+                    return 0;
+                }else if (x1_peq>5||x1_peq<0||y1_peq>5||y1_peq<0)
+                {
                     paint(1);
                     printf("\t\t    DIGITE UMA COORDENADA VÁLIDA!\n");
                     reset();
@@ -485,7 +479,12 @@ int main()
                 x2_peq = (int)strtol(posicao1_peq, NULL, 16)-1;
                 y2_peq = (int)strtol(posicao2_peq, NULL, 16)-1;
 
-                if (x2_peq>5||x2_peq<0||y2_peq>5||y2_peq<0){
+                 if (x2_peq==-1 && y2_peq==-1)
+                {
+                    defeat();
+                    return 0;
+                }else if (x2_peq>5||x2_peq<0||y2_peq>5||y2_peq<0)
+                {
                     paint(1);
                     printf("\t\t    DIGITE UMA COORDENADA VÁLIDA!\n");
                     reset();
@@ -508,6 +507,7 @@ int main()
         {
             exibeTabuleiro(bigarr, casas6x6, H, h, W, w, 2);
 
+            //PlaySound(NULL, NULL, NULL);
             defeat();
         }
 
@@ -756,7 +756,7 @@ void credits(){
     Sleep(500);
     printf("\t\t\t     Desenvolvedores:\n");
     printf("\t     Antonio Nunes, Arthur Lôbo e Guido Xenofonte\n\n");
-    printf("\t\t\t  Senhor do código-bruto:\n");
+    printf("\t\t\t  Sir. Caçador de bugs:\n");
     printf("\t\t\t\tArthur Lôbo\n\n");
     Sleep(500);
     printf("\t\t    Barão da música e efeitos sonoros:\n");
@@ -801,6 +801,40 @@ void defeat(){
 }
 
 // FUNÇÕES OBRIGATÓRIAS:
+
+void embaralhar(int **bigarr, int *colorarr, int *casasarr, int valor_pulado)
+{
+    int r=0,g=0,ye=0,b=0,p=0,c=0;
+
+    for (int i=0; i<36; i++)
+    {
+        colorarr[i]=randcolornum(&r,&g,&ye,&b,&p,&c,6);
+        if (i==35)
+        {
+            colorarr[i+1]=0;
+        }
+    }
+
+    for (int i=0;i<13;i++)
+    {
+        for (int j=0;j<13;j++)
+        {
+            bigarr[i][j]=(i!=6||j!=6)? 0:colorarr[0];
+        }
+    }
+
+    r=0,g=0,ye=0,b=0,p=0,c=0;
+
+    for (int i=0; i<7; i++)
+    {
+        if (i!=valor_pulado)
+        {
+            casasarr[i]=randcolornum(&r,&g,&ye,&b,&p,&c,1);
+        }
+    }
+}
+
+
 
 int exibeTabuleiro(int **tabuleiro, struct Casa **tabuleiroMini, int H, int h, int W, int w, int modo)
 {
@@ -979,7 +1013,7 @@ int fazIntriga(struct Casa **casas6x6, bool *cortranc, int *casasarr, int x1_peq
     do
     {
         paint(1);
-        printf("\tDIGITE UMA PEÇA DO TABULEIRO PARA TRANCAR. (1 OU 2): ");
+        printf("\n\tDIGITE UMA PEÇA DO TABULEIRO PARA TRANCAR. (1 OU 2): ");
         reset();
 
         scanf(" %d", &n1);
@@ -1013,7 +1047,7 @@ int fazIntriga(struct Casa **casas6x6, bool *cortranc, int *casasarr, int x1_peq
         else if (casasarr[n2] != casas6x6[x1_peq][y1_peq].cor  &&  casasarr[n2] != casas6x6[x2_peq][y2_peq].cor)
         {
             paint(1);
-            printf("\tSOMENTE AS CORES DAS CASAS ENVOLVIDAS NA INTRIGA PODEM SER TRANCADAS!\n");
+            printf("\tSOMENTE AS CORES DAS CASAS ENVOLVIDAS\n\tNA INTRIGA PODEM SER TRANCADAS!\n");
             reset();
         }
 
@@ -1101,8 +1135,9 @@ int pontosCorretos(struct Casa **casas6x6, int *casasarr, int modo, int valor_pu
 
     int venceu = 1;
 
-    paint(2);
+    paint(1);
     printf("\n\tCasas corretas: \n\t");
+    paint(2);
 
     for (int i=0;i<7;i++)
     {
@@ -1116,7 +1151,7 @@ int pontosCorretos(struct Casa **casas6x6, int *casasarr, int modo, int valor_pu
                     venceu = 0;
                     continue;
                 }
-                printf(" Vermelho ");
+                printf("Vermelho | ");
                 continue;
             case 2:
                 if (g!=i)
@@ -1124,7 +1159,7 @@ int pontosCorretos(struct Casa **casas6x6, int *casasarr, int modo, int valor_pu
                     venceu = 0;
                     continue;
                 }
-                printf(" Verde ");
+                printf("Verde | ");
                 continue;
             case 3:
                 if (ye!=i)
@@ -1132,7 +1167,7 @@ int pontosCorretos(struct Casa **casas6x6, int *casasarr, int modo, int valor_pu
                     venceu = 0;
                     continue;
                 }
-                printf(" Amarelo ");
+                printf("Amarelo | ");
                 continue;
             case 4:
                 if (b!=i)
@@ -1140,7 +1175,7 @@ int pontosCorretos(struct Casa **casas6x6, int *casasarr, int modo, int valor_pu
                     venceu = 0;
                     continue;
                 }
-                printf(" Azul ");
+                printf("Azul | ");
                 continue;
             case 5:
                 if (p!=i)
@@ -1148,7 +1183,7 @@ int pontosCorretos(struct Casa **casas6x6, int *casasarr, int modo, int valor_pu
                     venceu = 0;
                     continue;
                 }
-                printf(" Roxo ");
+                printf("Roxo | ");
                 continue;
             case 6:
                 if (c!=i)
@@ -1156,14 +1191,14 @@ int pontosCorretos(struct Casa **casas6x6, int *casasarr, int modo, int valor_pu
                     venceu = 0;
                     continue;
                 }
-                printf(" Ciano ");
+                printf("Ciano | ");
                 continue;
         }
         //printf("\t\t %d  %d  %d  %d  %d  %d\n\n\n", r,g,ye,b,p,c);
 
     }
 
-    printf("\n");
+    printf("\n\n");
     reset();
 
     return venceu;
