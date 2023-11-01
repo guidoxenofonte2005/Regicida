@@ -1,1 +1,4 @@
 # Regicida
+> "As Casas estão disputando ferozmente pelo Trono. Resta você, dono de todos os segredos, manipular vassalos e nobres para chegar num resultado que, apesar de não agradar a todos, trará paz. Entretanto, o tempo é escasso e algumas das suas preciosas informações tardam a chegar. Você precisará trabalhar com incertezas por um momento. E quando as informações chegarem, talvez seja tarde demais para reverter a situação. A guerra pode estar mais perto do que nunca e a única pessoa capaz de evita-la é você."
+- Porte do jogo **Regicida**, do professor [Roberto Pinheiro](https://pinheirobg.com/index.php/portfolio/regicida/), contendo os modos ***Concentração Central*** e ***Controle das Fronteiras***.
+- Feito em parceria com [Antônio Nunes](https://github.com/AntonioNunessz) e [Arthur Lôbo](https://github.com/OArthr).
